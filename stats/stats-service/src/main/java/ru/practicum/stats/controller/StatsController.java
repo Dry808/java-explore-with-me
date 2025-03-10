@@ -12,12 +12,17 @@ import ru.practicum.stats.service.StatsService;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Контроллер сервиса статистики
+ */
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 public class StatsController {
     private final StatsService statsService;
 
+    // Сохранение информации о запросе
     @PostMapping("/hit")
     public void addHit(@RequestBody @Valid EndpointHitDto hit) {
         log.info("Попытка добавления запроса: {}", hit);
@@ -25,6 +30,7 @@ public class StatsController {
         log.info("Запрос на {} от {} сохранён", hit.getUri(), hit.getIp());
     }
 
+    // получение статистики по посещениям
     @GetMapping("/stats")
     public List<ViewStatsDto> getStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,

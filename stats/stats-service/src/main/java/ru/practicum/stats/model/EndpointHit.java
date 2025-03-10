@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+/**
+ * Модель - информации о том, что на uri конкретного сервиса был отправлен запрос
+ */
 @Data
 @EqualsAndHashCode
 @AllArgsConstructor

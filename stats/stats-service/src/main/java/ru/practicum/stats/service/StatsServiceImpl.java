@@ -11,16 +11,17 @@ import ru.practicum.stats.storage.StatsRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+/**
+ * Сервис для работы со статистикой посещений эндпоинтов.
+ */
 @Service
 @RequiredArgsConstructor
 public class StatsServiceImpl implements StatsService {
     private final StatsRepository statsRepository;
-    private final EndpointHitMapper hitMapper;
 
     @Override
     public void addHit(EndpointHitDto hit) {
-        statsRepository.save(hitMapper.toEndpointHit(hit));
+        statsRepository.save(EndpointHitMapper.toEndpointHit(hit));
     }
 
     @Override

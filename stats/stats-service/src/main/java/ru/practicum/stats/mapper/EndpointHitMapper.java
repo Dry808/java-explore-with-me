@@ -7,13 +7,26 @@ import ru.practicum.stats.model.EndpointHit;
 /**
  * Маппер DTO <--> model
  */
+
 @Component
-public class EndpointHitMapper {
-    public EndpointHit toEndpointHit(EndpointHitDto hit) {
-        return new EndpointHit(hit.getId(), hit.getApp(), hit.getUri(), hit.getIp(), hit.getTimestamp());
+public final class EndpointHitMapper {
+    public static EndpointHit toEndpointHit(EndpointHitDto hit) {
+        return new EndpointHit(
+                hit.getId(),
+                hit.getApp(),
+                hit.getUri(),
+                hit.getIp(),
+                hit.getTimestamp()
+        );
     }
 
-    public EndpointHitDto toEndpointHitDto(EndpointHit hit) {
-        return new EndpointHitDto(hit.getId(), hit.getApp(), hit.getUri(), hit.getIp(), hit.getTimestamp());
+    public static EndpointHitDto toEndpointHitDto(EndpointHit hit) {
+        return new EndpointHitDto(
+                hit.getId(),
+                hit.getApp(),
+                hit.getUri(),
+                hit.getIp(),
+                hit.getTimestamp()
+        );
     }
 }

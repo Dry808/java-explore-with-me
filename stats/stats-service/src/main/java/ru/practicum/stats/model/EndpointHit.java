@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 /**
  * Модель - информации о том, что на uri конкретного сервиса был отправлен запрос
  */
+@Builder
 @Data
 @EqualsAndHashCode
 @AllArgsConstructor

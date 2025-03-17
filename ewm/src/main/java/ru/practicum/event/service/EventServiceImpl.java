@@ -1,12 +1,16 @@
 package ru.practicum.event.service;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.storage.CategoryRepository;
@@ -68,70 +72,60 @@ public class EventServiceImpl implements EventService {
         return dto;
     }
 
+
     @Override
     public List<EventShortDto> getAll(EventFilterDto filterDto) {
-        return List.of();
+        // Создание предиката для фильтрации событий
+        BooleanExpression predicate = filterBuilder.buildPredicate(filterDto);
+
+        // Создание пагинации и сортировки
+        Pageable pageable = PageRequest.of(
+                filterDto.getFrom() / filterDto.getSize(), // Вычисление номера страницы
+                filterDto.getSize(), // Размер страницы
+                createSort(filterDto.getSort()) // Создание сортировки
+        );
+
+        // Получение страницы событий с учетом фильтрации, пагинации и сортировки
+        Page<Event> page = repository.findAll(predicate, pageable);
+
+        // Получение количества просмотров для каждого события
+        Map<Long, Long> eventsViews = getViewsForEvents(page.getContent());
+
+        // Преобразование событий в DTO и установка количества просмотров
+        return page.getContent()
+                .stream()
+                .map(EventMapper::toShortDto) // Преобразование Event в EventShortDto
+                .map(dto -> {
+                            dto.setViews(eventsViews.get(dto.getId())); // Установка количества просмотров
+                            return dto;
+                        }
+                )
+                .toList(); // Преобразование в список
     }
 
     @Override
     public List<EventFullDto> getAll(AdminEventFilterDto filterDto) {
-        return List.of();
+        BooleanExpression predicate = filterBuilder.buildPredicate(filterDto);
+
+        Pageable pageable = PageRequest.of(
+                filterDto.getFrom() / filterDto.getSize(),
+                filterDto.getSize()
+        );
+
+        Page<Event> page = repository.findAll(predicate, pageable);
+
+        Map<Long, Long> eventsViews = getViewsForEvents(page.getContent());
+
+        return page.getContent()
+                .stream()
+                .map(EventMapper::toDto)
+                .map(dto -> {
+                            dto.setViews(eventsViews.get(dto.getId()));
+                            return dto;
+                        }
+                )
+                .toList();
     }
-
-
-//    @Override
-//    public List<EventShortDto> getAll(EventFilterDto filterDto) {
-//        // Создание предиката для фильтрации событий
-//        BooleanExpression predicate = filterBuilder.buildPredicate(filterDto);
-//
-//        // Создание пагинации и сортировки
-//        Pageable pageable = PageRequest.of(
-//                filterDto.getFrom() / filterDto.getSize(), // Вычисление номера страницы
-//                filterDto.getSize(), // Размер страницы
-//                createSort(filterDto.getSort()) // Создание сортировки
-//        );
-//
-//        // Получение страницы событий с учетом фильтрации, пагинации и сортировки
-//        Page<Event> page = repository.findAll(predicate, pageable);
-//
-//        // Получение количества просмотров для каждого события
-//        Map<Long, Long> eventsViews = getViewsForEvents(page.getContent());
-//
-//        // Преобразование событий в DTO и установка количества просмотров
-//        return page.getContent()
-//                .stream()
-//                .map(EventMapper::toShortDto) // Преобразование Event в EventShortDto
-//                .map(dto -> {
-//                            dto.setViews(eventsViews.get(dto.getId())); // Установка количества просмотров
-//                            return dto;
-//                        }
-//                )
-//                .toList(); // Преобразование в список
-//    }
-//
-//    @Override
-//    public List<EventFullDto> getAll(AdminEventFilterDto filterDto) {
-//        BooleanExpression predicate = filterBuilder.buildPredicate(filterDto);
-//
-//        Pageable pageable = PageRequest.of(
-//                filterDto.getFrom() / filterDto.getSize(),
-//                filterDto.getSize()
-//        );
-//
-//        Page<Event> page = repository.findAll(predicate, pageable);
-//
-//        Map<Long, Long> eventsViews = getViewsForEvents(page.getContent());
-//
-//        return page.getContent()
-//                .stream()
-//                .map(EventMapper::toDto)
-//                .map(dto -> {
-//                            dto.setViews(eventsViews.get(dto.getId()));
-//                            return dto;
-//                        }
-//                )
-//                .toList();
-//    }
 
     @Override
     public List<EventShortDto> getAll(Long userId, Integer from, Integer size) {
@@ -232,11 +226,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest request) {
         Event oldEvent = repository.findById(eventId).orElseThrow(
-                () -> new NotFoundException("Event with id=%d was not found".formatted(eventId))
+                () -> new NotFoundException("Event с id=%d не найдено".formatted(eventId))
         );
 
         if (oldEvent.getState() == EventState.PUBLISHED) {
-            throw new ConflictException("Only pending or canceled events can be changed");
+            throw new ConflictException("Т");
         }
 
         if (request.getTitle() != null && !request.getTitle().equals(oldEvent.getTitle())) {
@@ -339,49 +333,48 @@ public class EventServiceImpl implements EventService {
 
     // метод для получения количества просмотров для списка событий
     private Map<Long, Long> getViewsForEvents(List<Event> events) {
-        // Формат даты, который используется в statsClient
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        // Находим самую раннюю дату создания события
-        LocalDateTime earliestEvent = events.stream()
-                .map(Event::getCreatedOn)
-                .min(LocalDateTime::compareTo)
-                .orElseThrow(() -> new IllegalArgumentException("Список событий пуст"));
+        LocalDateTime earliestEvent = events.getFirst().getCreatedOn();
 
-        // Форматируем даты начала и конца
+        for (Event event : events) {
+            if (event.getCreatedOn().isBefore(earliestEvent)) {
+                earliestEvent = event.getCreatedOn();
+            }
+        }
+
         String start = earliestEvent.format(formatter);
+
         String end = LocalDateTime.now().format(formatter);
 
-        // Создаем мапу для связи URI и ID события
         Map<String, Long> uriIdMap = new HashMap<>();
 
-        // Формируем список URI для запроса статистики
         List<String> eventsUris = events.stream()
                 .map(event -> {
                     String uri = "/events/" + event.getId();
+
                     uriIdMap.put(uri, event.getId());
+
                     return uri;
-                })
-                .toList();
+                }).toList();
 
-        // Получаем статистику просмотров
-        List<ViewStatsDto> viewStatsList = statsClient.getStats(
-                LocalDateTime.parse(start, formatter),
-                LocalDateTime.parse(end, formatter),
-                eventsUris,
-                true
-        );
+        ResponseEntity<Object> response = statsClient.getStats(start, end, eventsUris, true);
 
-        // Создаем мапу для хранения количества просмотров по ID события
+        Object responseBody = response.getBody();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<ViewStatsDto> viewStatsList = mapper.convertValue(responseBody,
+                new TypeReference<>() {
+                });
+
         Map<Long, Long> idsToViewsMap = new HashMap<>();
 
-        // Если статистика пуста, заполняем мапу нулями
         if (viewStatsList.isEmpty()) {
             for (Event event : events) {
                 idsToViewsMap.put(event.getId(), 0L);
             }
         } else {
-            // Заполняем мапу данными из статистики
             for (ViewStatsDto viewStats : viewStatsList) {
                 idsToViewsMap.put(uriIdMap.get(viewStats.getUri()), viewStats.getHits());
             }

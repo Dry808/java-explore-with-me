@@ -34,9 +34,10 @@ public class PrivateEventController {
         return service.getById(userId, eventId);
     }
 
-    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventFullDto create(@PathVariable("userId") Long userId, @RequestBody @Valid NewEventDto eventDto) {
+    @PostMapping
+    public EventFullDto create(@PathVariable("userId") Long userId,
+                               @RequestBody NewEventDto eventDto) {
         return service.create(userId, eventDto);
     }
 

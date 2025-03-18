@@ -1,7 +1,6 @@
 package ru.practicum.category.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.NewCategoryDto;
@@ -63,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Long catId) {
         if (eventRepository.existsByCategoryId(catId)) {
-            throw new ConflictException("The category is not empty");
+            throw new ConflictException("Категория не пустая");
         }
         repository.deleteById(catId);
     }

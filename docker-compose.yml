@@ -3,7 +3,7 @@ services:
     build: stats/stats-service
     image: stats-service
     ports:
-      - "9091:9091"
+      - "9090:9090"
     environment:
       - JAVA_OPTS=-Duser.timezone=UTC
       - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/stats
@@ -38,7 +38,7 @@ services:
     build: ewm
     image: ewm-service
     ports:
-      - "8081:8081"
+      - "8080:8080"
     environment:
       - JAVA_OPTS=-Duser.timezone=UTC
       - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5434/ewm

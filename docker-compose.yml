@@ -6,7 +6,7 @@ services:
       - "9090:9090"
     environment:
       - JAVA_OPTS=-Duser.timezone=UTC
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/stats
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats
       - SPRING_DATASOURCE_USERNAME=sa
       - SPRING_DATASOURCE_PASSWORD=sa
     depends_on:
@@ -41,7 +41,7 @@ services:
       - "8080:8080"
     environment:
       - JAVA_OPTS=-Duser.timezone=UTC
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5434/ewm
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5434/ewm
       - SPRING_DATASOURCE_USERNAME=sa
       - SPRING_DATASOURCE_PASSWORD=sa
     depends_on:

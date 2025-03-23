@@ -5,6 +5,8 @@ package ru.practicum.stats.storage;
  */
 public interface ViewStatsProjection {
     String getApp();
+
     String getUri();
+
     Long getHits();
 }

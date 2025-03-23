@@ -82,7 +82,7 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> getAll(EventFilterDto filterDto) {
         BooleanExpression predicate = filterBuilder.buildPredicate(filterDto); // предикат
 
-        Pageable pageable = PageRequest.of( // объект пагинации и сортировки
+        Pageable pageable = PageRequest.of(// объект пагинации и сортировки
                 filterDto.getFrom() / filterDto.getSize(),
                 filterDto.getSize(),
                 createSort(filterDto.getSort())
@@ -110,7 +110,7 @@ public class EventServiceImpl implements EventService {
     public List<EventFullDto> getAll(AdminEventFilterDto filterDto) {
         BooleanExpression predicate = filterBuilder.buildPredicate(filterDto); // предикат
 
-        Pageable pageable = PageRequest.of( // пагинация
+        Pageable pageable = PageRequest.of(// пагинация
                 filterDto.getFrom() / filterDto.getSize(),
                 filterDto.getSize()
         );
@@ -133,7 +133,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public List<EventShortDto> getAll(Long userId, Integer from, Integer size) {
-        Pageable pageable = PageRequest.of( // пагинация
+        Pageable pageable = PageRequest.of(// пагинация
                 from / size,
                 size
         );

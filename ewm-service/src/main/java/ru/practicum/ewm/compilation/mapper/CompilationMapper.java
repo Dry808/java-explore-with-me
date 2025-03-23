@@ -3,6 +3,7 @@ package ru.practicum.ewm.compilation.mapper;
 import ru.practicum.ewm.event.mapper.EventMapper;
 import ru.practicum.ewm.compilation.model.Compilation;
 import ru.practicum.ewm.compilation.dto.CompilationDto;
+
 /**
  * Mapper compilation <-->DTO
  */

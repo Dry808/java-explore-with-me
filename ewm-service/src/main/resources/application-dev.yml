@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      enabled: true
+spring:
+  datasource:
+    url: jdbc:postgresql://ewm-db:5434/ewm
+    username: sa
+    password: sa
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+  application:
+    name: ewm-main-service
+stats-server:
+  url: http://stats-server:9090

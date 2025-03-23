@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.ewm.exceptions.*;
 import ru.practicum.ewm.exceptions.ApiError;
-import ru.practicum.ewm.main.exceptions.*;
+
 
 import java.time.LocalDateTime;
 import static org.springframework.http.HttpStatus.*;

@@ -9,23 +9,20 @@ import java.time.LocalDateTime;
 /**
  * Модель - информации о том, что на uri конкретного сервиса был отправлен запрос
  */
-@Data
-@EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Data
 @Builder
 @Table(name = "hit")
-public class EndpointHit {
+public class Hit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "app", nullable = false)
+    @Column(nullable = false)
     private String app;
-    @Column(name = "uri", nullable = false)
+    @Column(nullable = false)
     private String uri;
-    @Column(name = "ip", nullable = false)
+    @Column(nullable = false)
     private String ip;
-    @Column(name = "timestamp", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime timestamp;
 }

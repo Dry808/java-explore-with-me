@@ -3,12 +3,12 @@ package ru.practicum.stats.storage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.practicum.stats.model.EndpointHit;
+import ru.practicum.stats.model.Hit;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
+public interface StatsRepository extends JpaRepository<Hit, Long> {
 
     @Query("SELECT h.app AS app, h.uri AS uri, COUNT(h) AS hits  \n" +
             "FROM Hit h\n" +

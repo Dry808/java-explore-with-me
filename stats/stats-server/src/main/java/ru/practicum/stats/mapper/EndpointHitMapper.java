@@ -1,14 +1,14 @@
 package ru.practicum.stats.mapper;
 
 import ru.practicum.stats.dto.EndpointHitDto;
-import ru.practicum.stats.model.EndpointHit;
+import ru.practicum.stats.model.Hit;
 
 /**
  * Маппер DTO <--> model
  */
 public final class EndpointHitMapper {
-    public static EndpointHit toEndpointHit(EndpointHitDto hit) {
-        return EndpointHit.builder()
+    public static Hit toEndpointHit(EndpointHitDto hit) {
+        return Hit.builder()
                 .app(hit.getApp())
                 .ip(hit.getIp())
                 .timestamp(hit.getTimestamp())
@@ -16,7 +16,7 @@ public final class EndpointHitMapper {
                 .build();
     }
 
-    public static EndpointHitDto toEndpointHitDto(EndpointHit hit) {
+    public static EndpointHitDto toEndpointHitDto(Hit hit) {
         return new EndpointHitDto(
                 hit.getId(),
                 hit.getApp(),

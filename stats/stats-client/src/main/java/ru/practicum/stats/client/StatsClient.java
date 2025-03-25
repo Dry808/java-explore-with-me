@@ -1,14 +1,16 @@
 package ru.practicum.stats.client;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.http.ResponseEntity;
 
-import ru.practicum.stats.dto.EndpointHitDto;
-import ru.practicum.stats.dto.ViewStatsDto;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatsClient {
-    void addHit(EndpointHitDto hit);
+    ResponseEntity<Void> addHit(@NotBlank String uri, @NotBlank String ip);
 
-    List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique);
+    ResponseEntity<Object> getStats(@NotNull String start, @NotNull String end,
+                                    @Nullable List<String> uris,
+                                    @Nullable Boolean unique);
 }

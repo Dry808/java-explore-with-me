@@ -13,7 +13,6 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
  */
 @Configuration
 public class ClientConfig {
-
     @Value("${stats-server.url}")
     private String serverUrl;
 

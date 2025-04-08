@@ -1,0 +1,653 @@
+{
+	"info": {
+		"_postman_id": "0312e9fb-3b4d-47ae-a997-fb9592ec5489",
+		"name": "feature_comments",
+		"description": "Comments API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35193722"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"try {\r",
+							"    let responseData = pm.response.json();\r",
+							"    if (responseData.id) {\r",
+							"        pm.environment.set(\"user_id\", responseData.id);\r",
+							"    } else {\r",
+							"        console.warn(\"No user id.\");\r",
+							"    }\r",
+							"\r",
+							"}catch(err) {\r",
+							"    console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"email\": \"{{$randomEmail}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add new category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    let responseData = pm.response.json();\r",
+							"    if (responseData.id) {\r",
+							"        pm.environment.set(\"category_id\", responseData.id);\r",
+							"    } else {\r",
+							"        console.warn(\"No category id.\");\r",
+							"    }\r",
+							"\r",
+							"}catch(err) {\r",
+							"    console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"{{$randomFirstName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/categories",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create new event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    let responseData = pm.response.json();\r",
+							"    if (responseData.id) {\r",
+							"        pm.environment.set(\"event_id\", responseData.id);\r",
+							"    } else {\r",
+							"        console.warn(\"No event id.\");\r",
+							"    }\r",
+							"\r",
+							"}catch(err) {\r",
+							"    console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Tech Conference 2025\",\r\n  \"annotation\": \"An amazing tech conference about the latest trends in AI and Software Development.\",\r\n  \"category\": {{category_id}},\r\n  \"description\": \"Join us for an in-depth exploration of AI, cloud computing, and software development trends in 2025.\",\r\n  \"eventDate\": \"2025-06-15 14:00:00\",\r\n  \"location\": {\r\n    \"lat\": 40.712776,\r\n    \"lon\": -74.005974\r\n  },\r\n  \"paid\": false,\r\n  \"participantLimit\": 100,\r\n  \"requestModeration\": true\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/{{user_id}}/events",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"{{user_id}}",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "comment unpublished status event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"Test comment\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/{{user_id}}/comments?eventId={{event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"{{user_id}}",
+						"comments"
+					],
+					"query": [
+						{
+							"key": "eventId",
+							"value": "{{event_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "event status published",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
+							"    pm.response.to.be.ok;  \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"stateAction\":\"PUBLISH_EVENT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/events/{{event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"events",
+						"{{event_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add new comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    let responseData = pm.response.json();\r",
+							"    if (responseData.id) {\r",
+							"        pm.environment.set(\"comment_id\", responseData.id);\r",
+							"    } else {\r",
+							"        console.warn(\"No comment id.\");\r",
+							"    }\r",
+							"\r",
+							"}catch(err) {\r",
+							"    console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"const comment = pm.response.json()\r",
+							"\r",
+							"pm.test(\"Поле isModerated должно быть false\", function () {\r",
+							"    pm.expect(comment.isModerated).to.be.false;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"Test comment\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/{{user_id}}/comments?eventId={{event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"{{user_id}}",
+						"comments"
+					],
+					"query": [
+						{
+							"key": "eventId",
+							"value": "{{event_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "moderate ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
+							"    pm.response.to.be.ok;  \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/admin/comments/{{comment_id}}/moderate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"comments",
+						"{{comment_id}}",
+						"moderate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get event comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате JSON\", function () {\r",
+							"    pm.response.to.be.ok;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const target = pm.response.json()[0];\r",
+							"\r",
+							"pm.test(\"Комментарии должны содержать поля: id, eventId, authorId, text, createdOn, isModerated\", function () {\r",
+							"    pm.expect(target).to.have.all.keys('id', 'eventId', 'authorId', 'text', 'createdOn', 'isModerated');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users/{{user_id}}/comments?eventId={{event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"{{user_id}}",
+						"comments"
+					],
+					"query": [
+						{
+							"key": "eventId",
+							"value": "{{event_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get events with comments count",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате JSON\", function () {\r",
+							"    pm.response.to.be.ok;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json()[0];\r",
+							"\r",
+							"pm.test(\"Число комментариев должно быть верным\", function () {\r",
+							"    pm.expect(body.comments).to.equal(1);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/events",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update event comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате JSON\", function () {\r",
+							"    pm.response.to.be.ok;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const target = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Новый текст должен быть 'Updated text'\", function () {\r",
+							"    pm.expect(target.text).to.equal(\"Updated text\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"Updated text\",\r\n    \"commentId\" : {{comment_id}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/{{user_id}}/comments?eventId={{event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"{{user_id}}",
+						"comments"
+					],
+					"query": [
+						{
+							"key": "eventId",
+							"value": "{{event_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete event comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
+							"    pm.response.to.be.ok;    \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"Updated text\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/{{user_id}}/comments/{{comment_id}}?eventId={{event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"{{user_id}}",
+						"comments",
+						"{{comment_id}}"
+					],
+					"query": [
+						{
+							"key": "eventId",
+							"value": "{{event_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "default"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "event_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "category_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "comment_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
